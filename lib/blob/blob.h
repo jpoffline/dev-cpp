@@ -2,6 +2,7 @@
 #include <string>
 #include <ostream>
 #include <fstream>
+#include <vector>
 #include "../binaryio/write.h"
 #include "../binaryio/read.h"
 #include "getset.h"
@@ -18,17 +19,7 @@ class blob
         binary_dump out;
         binary_read read;
 
-        void write_binary(std::ofstream& fs)
-        {
-            _id.write(out, fs);
-            _data.write(out, fs);
-        }
 
-        void read_binary(std::ifstream& fs)
-        {
-            _id.read(read, fs);
-            _data.read(read, fs);
-        }
 
     public:
         blob(){};   
@@ -43,10 +34,6 @@ class blob
             os << dt.id() << " " << dt.data() << "\n";
             return os;
         }   
-
-
-
-
 
         void write_binary(std::string fn)
         {
@@ -63,7 +50,54 @@ class blob
         }
 
 
+        void write_binary(std::ofstream& fs)
+        {
+            _id.write(out, fs);
+            _data.write(out, fs);
+        }
 
+        void read_binary(std::ifstream& fs)
+        {
+            _id.read(read, fs);
+            _data.read(read, fs);
+        }
+
+
+};
+
+
+class blobs
+{
+    private:
+        std::string _filename;
+        std::ofstream fs;
+        void _open()
+        {
+            fs.open(_filename, std::ios::out | std::ios::binary);
+        }
+    public:
+        blobs(std::string fn) 
+        : _filename(fn)
+        {
+            _open();
+        }
+        blobs() 
+        : _filename("default.bin")
+        {
+            _open();
+        }
+        void add(id_t id, data_t data)
+        {
+            blob b(id, data);
+            b.write_binary(fs);
+        }
+
+        void seekid(id_t id)
+        {
+            
+        }
+
+        ~blobs(){fs.close();}
 };
 
 

@@ -20,7 +20,7 @@ class GetSet
         void set(T d){_data = d;}
         void write(binary_dump& dumper, std::ofstream& file)
         {
-            std::cout << "WRITING: " << _data << std::endl;
+            //std::cout << "WRITING: " << _data << std::endl;
             dumper.write<T>(file, _data);
         }
         void read(binary_read& reader, std::ifstream& file)
